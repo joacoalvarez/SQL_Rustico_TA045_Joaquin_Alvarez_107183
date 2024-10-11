@@ -1,54 +1,54 @@
 use crate::{condition::Condition, order::OrderBy};
 use std::{collections::HashMap, str::FromStr};
 
-// Enum representing the different SQL commands.
+/// Representacion de los distintos comandos
 #[derive(Debug)]
 pub enum Commands {
     Insert {
-        table: String,
+        tables: Vec<String>,
         headers: Vec<String>,
         values: Vec<String>,
     },
     Update {
-        table: String,
+        tables: Vec<String>,
         updates: HashMap<String, String>,
         where_st: Option<Condition>,
     },
     Delete {
-        table: String,
+        tables: Vec<String>,
         where_st: Option<Condition>,
     },
     Select {
         headers: Vec<String>,
-        table: String,
+        tables: Vec<String>,
         where_st: Option<Condition>,
         order: Option<Vec<OrderBy>>,
     },
 }
 
-//Implement FromStr to allow parsing commands from strings.
+/// Recibe un string y retorna su correspondiente Commmand inicializado
 impl FromStr for Commands {
     type Err = &'static str;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_uppercase().as_str() {
             "INSERT" => Ok(Commands::Insert {
-                table: String::new(),
+                tables: Vec::new(),
                 headers: Vec::new(),
                 values: Vec::new(),
             }),
             "UPDATE" => Ok(Commands::Update {
-                table: String::new(),
+                tables: Vec::new(),
                 updates: HashMap::new(),
                 where_st: None,
             }),
             "DELETE" => Ok(Commands::Delete {
-                table: String::new(),
+                tables: Vec::new(),
                 where_st: None,
             }),
             "SELECT" => Ok(Commands::Select {
                 headers: Vec::new(),
-                table: String::new(),
+                tables: Vec::new(),
                 where_st: None,
                 order: None,
             }),
