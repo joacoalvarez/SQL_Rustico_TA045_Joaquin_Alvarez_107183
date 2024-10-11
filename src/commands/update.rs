@@ -5,8 +5,8 @@ use crate::condition::Condition;
 use crate::errors::ErrorType;
 use std::{
     collections::HashMap,
+    fs::File,
     io::{BufRead, Write},
-    fs::File
 };
 
 /// Verifica que los headers a actualizar esten en la tabla
@@ -43,6 +43,7 @@ fn update_row_values(
 }
 
 // Rearma la fila con los valores actualizados de haber, sino reuso los del buffer
+#[allow(clippy::module_name_repetitions)]
 pub fn write_update(
     aux_file: &mut File,
     should_update: bool,
@@ -53,13 +54,11 @@ pub fn write_update(
 ) -> Result<(), ErrorType> {
     if should_update {
         let updated_row = update_row_values(table_header, row_values_map, updates);
-        writeln!(aux_file, "{}", updated_row.join(",")).map_err(|e| {
-            ErrorType::OtherError(format!("writing to auxiliary file {e} failed"))
-        })?;
+        writeln!(aux_file, "{}", updated_row.join(","))
+            .map_err(|e| ErrorType::OtherError(format!("writing to auxiliary file {e} failed")))?;
     } else {
-        writeln!(aux_file, "{}", buffer.trim()).map_err(|e| {
-            ErrorType::OtherError(format!("writing to auxiliary file {e} failed"))
-        })?;
+        writeln!(aux_file, "{}", buffer.trim())
+            .map_err(|e| ErrorType::OtherError(format!("writing to auxiliary file {e} failed")))?;
     }
     Ok(())
 }
@@ -96,7 +95,14 @@ pub fn update(
             let should_update = should_filter(where_st, &row_values_map);
 
             // escribe en el archivo auxiliar la fila actualizada
-            write_update(&mut aux_file, should_update, &table_header, &row_values_map, updates, &buffer)?;
+            write_update(
+                &mut aux_file,
+                should_update,
+                &table_header,
+                &row_values_map,
+                updates,
+                &buffer,
+            )?;
 
             buffer.clear(); // Limpiar buffer para la próxima línea
         }

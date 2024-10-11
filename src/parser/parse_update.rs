@@ -1,6 +1,6 @@
 use super::extract_query::{
     expected_next_word, extract_and_parse_where_clause, extract_next_word, extract_table_names,
-    strip_single_quotes
+    strip_single_quotes,
 };
 use crate::command_types::Commands;
 use crate::condition::Condition;

@@ -1,5 +1,5 @@
-use crate::errors::ErrorType;
 use crate::condition::Condition;
+use crate::errors::ErrorType;
 use std::io::BufReader;
 use std::{collections::HashMap, error::Error, fs, fs::File, io, io::BufRead, io::Write};
 
@@ -112,7 +112,10 @@ fn get_all_tables(db_path: &str) -> Result<Vec<String>, ErrorType> {
 }
 
 /// Verifica si pasa las condiciones la fila
-pub fn should_filter(where_st: &Option<Condition>, row_values_map: &HashMap<String, String>) -> bool {
+pub fn should_filter(
+    where_st: &Option<Condition>,
+    row_values_map: &HashMap<String, String>,
+) -> bool {
     match where_st {
         Some(cond) => cond.evaluate(row_values_map),
         None => true,

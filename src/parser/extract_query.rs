@@ -103,7 +103,7 @@ pub fn extract_between_parenthesis(s: &mut String) -> Result<Vec<String>, ErrorT
 /// Extrae y parsea la condicion where
 pub fn extract_and_parse_where_clause(s: &mut String) -> Result<Condition, ErrorType> {
     // Busca ORDER, si no esta se posiciona antes del ';' final
-    let clause_end_pos = s.find("ORDER").unwrap_or(s.len() - 1); 
+    let clause_end_pos = s.find("ORDER").unwrap_or(s.len() - 1);
 
     let mut extracted_str = s[..clause_end_pos].trim().to_string();
 
@@ -155,7 +155,9 @@ fn parse_not_condition(s: &mut String) -> Result<Condition, ErrorType> {
         s.insert_str(0, &format!("{word} "));
     } else {
         // Si no hay más palabras (None), devolvemos un error
-        return Err(ErrorType::InvalidSyntax("Unexpected end of condition after NOT".into()));
+        return Err(ErrorType::InvalidSyntax(
+            "Unexpected end of condition after NOT".into(),
+        ));
     }
     parse_comparison_condition(s)
 }

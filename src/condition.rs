@@ -85,11 +85,8 @@ mod tests {
         assert!(!condition.evaluate(&row)); // false, 100 != 1000
 
         // no existe la columna
-        let condition = Condition::Comparison(
-            "noexiste".to_string(),
-            ComparisonOp::Eq,
-            "100".to_string(),
-        );
+        let condition =
+            Condition::Comparison("noexiste".to_string(), ComparisonOp::Eq, "100".to_string());
         assert!(!condition.evaluate(&row)); // false
     }
 
@@ -109,11 +106,8 @@ mod tests {
         assert!(!condition.evaluate(&row)); // false, 100 == 100
 
         // no existe la columna
-        let condition = Condition::Comparison(
-            "noexiste".to_string(),
-            ComparisonOp::Neq,
-            "100".to_string(),
-        );
+        let condition =
+            Condition::Comparison("noexiste".to_string(), ComparisonOp::Neq, "100".to_string());
         assert!(!condition.evaluate(&row));
     }
 

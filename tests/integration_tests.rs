@@ -20,10 +20,12 @@ fn test_select_ordenes_with_quantity_greater_than_one() -> Result<(), Box<dyn Er
         "SELECT id, producto, id_cliente FROM ordenes WHERE cantidad > 1;",
     )?;
 
-    let expected_output = Some("id,producto,id_cliente\n\
+    let expected_output = Some(
+        "id,producto,id_cliente\n\
                                                 102,Teléfono,2\n\
                                                 105,Mouse,4\n\
-                                                110,Teléfono,6\n".to_string(),
+                                                110,Teléfono,6\n"
+            .to_string(),
     );
 
     assert_eq!(output, expected_output);
@@ -37,9 +39,10 @@ fn test_select_ordenes_with_complex_conditions() -> Result<(), Box<dyn Error>> {
     let output = sql_main_replica(db_path, "SELECT id, producto, cantidad FROM ordenes WHERE (cantidad > 1 AND id_cliente = 2) OR (producto = 'Laptop' AND NOT id_cliente = 1) ORDER BY cantidad DESC, producto ASC;")?;
 
     let expected_output = Some(
-                                                "id,producto,cantidad\n\
+        "id,producto,cantidad\n\
                                                 102,Teléfono,2\n\
-                                                109,Laptop,1\n".to_string(),
+                                                109,Laptop,1\n"
+            .to_string(),
     ); // Verifica el orden esperado aquí
 
     assert_eq!(output, expected_output);
@@ -56,9 +59,10 @@ fn test_select_clientes_with_last_name_lopez_ordered_by_email_desc() -> Result<(
     )?;
 
     let expected_output = Some(
-                                                "id,nombre,email\n\
+        "id,nombre,email\n\
                                                 5,José,jose.lopez@email.com\n\
-                                                2,Ana,ana.lopez@email.com\n".to_string(),
+                                                2,Ana,ana.lopez@email.com\n"
+            .to_string(),
     );
 
     assert_eq!(output, expected_output);

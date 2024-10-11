@@ -178,7 +178,7 @@ mod tests {
         let db_path = "./test_select_db1";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -190,20 +190,20 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-    
+
         let where_condition = Some(Condition::Comparison(
             "id".to_string(),
             ComparisonOp::Eq,
             "1".to_string(),
         ));
-    
+
         let tables = vec![table_name.to_string()];
         let select_result = select(&headers, &tables, &where_condition, &None, db_path);
-    
+
         // Verificar el output
         let expected_output = "id,nombre\n1,Juan\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
@@ -213,7 +213,7 @@ mod tests {
         let db_path = "./test_select_db2";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -225,31 +225,30 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-    
+
         let where_condition = Some(Condition::Comparison(
             "id".to_string(),
             ComparisonOp::Eq,
             "3".to_string(),
         ));
-    
+
         let tables = vec![table_name.to_string()];
         let select_result = select(&headers, &tables, &where_condition, &None, db_path);
 
-    
         // Como no hay filas que coincidan con la condicion, el es solo los headers
         let expected_output = "id,nombre\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
-    
+
     #[test]
     fn test_select_without_where_condition() {
         let db_path = "./test_select_db3";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -261,24 +260,24 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-    
+
         let tables = vec![table_name.to_string()];
         let select_result = select(&headers, &tables, &None, &None, db_path);
-    
+
         // Verificar el output sin condición WHERE, debería incluir todas las filas
         let expected_output = "id,nombre\n1,Juan\n2,Maria\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
-    
+
     #[test]
     fn test_select_with_order() {
         let db_path = "./test_select_db4";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -290,28 +289,28 @@ mod tests {
                 &["1".to_string(), "Juan".to_string()],
             ]),
         );
-    
+
         let order_by = vec![OrderBy {
             column: "id".to_string(),
             direction: Direction::Ascending,
         }];
         let tables = vec![table_name.to_string()];
         let select_result = select(&headers, &tables, &None, &Some(order_by), db_path);
-    
+
         // Verificar el output con ORDER BY ascendente
         let expected_output = "id,nombre\n1,Juan\n2,Maria\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
-    
+
     #[test]
     fn test_select_with_where_condition_and_order() {
         let db_path = "./test_select_db6";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -323,7 +322,7 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-    
+
         let where_condition = Some(Condition::Comparison(
             "id".to_string(),
             ComparisonOp::Eq,
@@ -341,21 +340,21 @@ mod tests {
             &Some(order_by),
             db_path,
         );
-    
+
         // Verificar el output
         let expected_output = "id,nombre\n1,Juan\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
-    
+
     #[test]
     fn test_select_where_no_eq_rows_with_order() {
         let db_path = "./test_select_db7";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -367,7 +366,7 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-    
+
         let where_condition = Some(Condition::Comparison(
             "id".to_string(),
             ComparisonOp::Eq,
@@ -385,21 +384,21 @@ mod tests {
             &Some(order_by),
             db_path,
         );
-    
+
         // Como no hay filas que coincidan con la condición WHERE, solo deben aparecer los headers
         let expected_output = "id,nombre\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
-    
+
     #[test]
     fn test_select_with_order_descending() {
         let db_path = "./test_select_db8";
         let table_name = "test_table";
         let headers = vec!["id".to_string(), "nombre".to_string()];
-    
+
         // Configurar la tabla con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -412,21 +411,21 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-    
+
         // Ordenamiento descendiente de id
         let order_by = vec![OrderBy {
             column: "id".to_string(),
             direction: Direction::Descending,
         }];
         let tables = vec![table_name.to_string()];
-    
+
         // Ejecutar la selección
         let select_result = select(&headers, &tables, &None, &Some(order_by), db_path);
-    
+
         // Verificar el output
         let expected_output = "id,nombre\n3,Ana\n2,Maria\n1,Juan\n";
         assert_eq!(select_result.unwrap().unwrap(), expected_output);
-    
+
         teardown_table(db_path, table_name);
         fs::remove_dir_all(db_path).expect("Failed to delete test database directory");
     }
@@ -436,10 +435,10 @@ mod tests {
         let db_path = "./test_select_db_multiple";
         let table_name1 = "test_table1";
         let table_name2 = "test_table2";
-        
+
         let headers1 = vec!["id".to_string(), "nombre".to_string()];
         let headers2 = vec!["id".to_string(), "producto".to_string()];
-        
+
         // Crear las tablas con datos
         fs::create_dir_all(&db_path).expect("Failed to create test database directory");
         setup_table(
@@ -451,7 +450,7 @@ mod tests {
                 &["2".to_string(), "Maria".to_string()],
             ]),
         );
-        
+
         setup_table(
             db_path,
             table_name2,
@@ -472,7 +471,11 @@ mod tests {
         assert!(output.is_some(), "Output is None");
 
         let expected_output = "id,nombre\n1,Juan\n2,Maria\nid,producto\n1,Laptop\n2,Mouse\n";
-        assert_eq!(output.unwrap(), expected_output, "Output did not match expected");
+        assert_eq!(
+            output.unwrap(),
+            expected_output,
+            "Output did not match expected"
+        );
 
         teardown_table(db_path, table_name1);
         teardown_table(db_path, table_name2);
